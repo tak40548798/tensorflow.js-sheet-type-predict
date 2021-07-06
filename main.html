@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+    <script src="main.js" type="module"></script>
+    <title>tensorflowTest</title>
+</head>
+<style>
+    input {
+        width: 160px;
+    }
+    
+    button {
+        cursor: pointer;
+    }
+    
+    #parms-div {
+        display: flex;
+        justify-items: center;
+    }
+    
+    #parms>span,
+    input,
+    button,
+    select,
+    div {
+        margin-top: 10px;
+        margin-right: 10px;
+        height: 100%;
+    }
+    
+    .hyper-params>input,
+    button,
+    select,
+    div {
+        margin-right: 10px;
+        height: 100%;
+    }
+    
+    .hyper-params .dropdown div,
+    select {
+        margin-top: 0px;
+    }
+</style>
+
+<body>
+
+    <div style="position: relative;">
+        <video id="webcam" style="width: 500px;height: auto;border: 3px solid brown;"></video>
+        <div id="line1" style="z-index: 100;background-color: royalblue;position:fixed;display: none;height:2px;display: none">
+        </div>
+        <div id="line2" style="z-index: 100;background-color: royalblue;position:fixed;display: none;width:2px;display: none;">
+        </div>
+        <div id="webcamCrop" style="z-index: 200;border: green solid 3px;position:fixed;display: none;"></div>
+        <canvas style="display: none;width: 250px;height:auto;" id="crop"></canvas>
+
+    </div>
+
+    <div style="margin-top:10px;">
+        <span>model-json</span>
+        <input type="file" id="upload-json" />
+        <span>model-weights</span>
+        <input type="file" id="upload-weights" />
+        <button id="loadModel">Load Model</button>
+    </div>
+    <div id="parms-div" style="vertical-align: middle;">
+        <div id="parms">
+            <span>upload-image</span>
+            <input id="upload-image" type="file" multiple="multiple">
+            <span>select-label</span>
+            <select name="label" id="label">
+                <!-- <option value="0">Num-0：A8 or A</option>
+                <option value="1">Num-1：A4 or B</option>
+                <option value="2">Num-2：B4 or C</option> -->
+            </select>
+            <button id="addMultiSmaple" style="max-width: 150px;" title="上傳檔案輸入多個sample">
+                Append multiple Sample From InputFile
+            </button>
+            <button id="captureSample" style="max-width: 150px;" title="直接截圖輸入單個sample">
+                Append Single Sample From VideoFrame
+            </button>
+            <button id="trainModel" disabled="disabled">
+                Train
+            </button>
+            <button id="predict" disabled="disabled">
+                Predict
+            </button>
+            <button id="clear">Reset</button>
+            <div id="trainStatus">
+                TrainStatus
+            </div>
+            <div>
+                <button id="captureExample">screenShot</button>
+                <button id="downloadExample" disabled="disabled">downloadImageZIP</button>
+            </div>
+        </div>
+
+        <div class="hyper-params" style="width: 100px;display: inline-block;">
+
+            <!-- Learning rate -->
+            <div class="dropdown">
+                <label>Learning rate</label>
+                <div class="select">
+                    <select id="learningRate">
+                        <option value="0.00001">0.00001</option>
+                        <option selected value="0.0001">0.0001</option>
+                        <option value="0.01">0.001</option>
+                        <option value="0.03">0.003</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Batch size -->
+            <div class="dropdown">
+                <label>Batch size</label>
+                <div class="select">
+                    <select id="batchSizeFraction">
+                        <option value="0.05">0.05</option>
+                        <option value="0.1">0.1</option>
+                        <option selected value="0.4">0.4</option>
+                        <option value="1">1</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Epochs -->
+            <div class="dropdown">
+                <label>Epochs</label>
+                <div class="select">
+                    <select id="epochs">
+                        <option value="10">10</option>
+                        <option selected value="20">20</option>
+                        <option value="40">40</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Hidden units -->
+            <div class="dropdown">
+                <label>Hidden units</label>
+                <div class="select">
+                    <select id="dense-units">
+                        <option value="10">10</option>
+                        <option selected value="100">100</option>
+                        <option value="200">200</option>
+                    </select>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div style="margin-top:10px;font-family: Microsoft JhengHei;font-weight: bolder;font-size: 24px;" id="labelDiv">
+        Result:
+        <!-- <span class="id0">A8orA</span>
+        <span class="id1">A4orB</span>
+        <span class="id2">B4orC</span> -->
+    </div>
+</body>
+
+</html>
